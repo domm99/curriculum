@@ -22,7 +22,7 @@
 \LoadClass{extarticle}
 
 \RequirePackage[margin=2cm]{geometry}
-\RequirePackage{fontawesome}
+\RequirePackage{fontawesome5}
 
 %% v1.1: Optionally load academicons
 \if@academicons
@@ -56,6 +56,7 @@
 \RequirePackage{changepage}
 % \RequirePackage{marginfix}
 
+
 \setlength{\parindent}{0pt}
 \newcommand{\divider}{\textcolor{body!30}{\hdashrule{\linewidth}{0.6pt}{0.5ex}}\medskip}
 
@@ -68,7 +69,7 @@
 \newcommand{\githubsymbol}{\faGithub}
 \newcommand{\linksymbol}{\faLink}
 \newcommand{\booksymbol}{\faBook}
-\newcommand{\orcidsymbol}{\aiOrcid}
+\newcommand{\orcidsymbol}{\faOrcid}
 \newcommand{\mailsymbol}{\faEnvelope}
 
 \newcommand{\printinfo}[2]{\mbox{\textcolor{accent}{#1}\hspace{0.5em}#2\hspace{2em}}}
