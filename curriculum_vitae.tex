@@ -1,6 +1,12 @@
 \documentclass[10pt,a4paper]{altacv}
 \usepackage{cv-style}
 \usepackage{hyperref}
+\ExecuteBibliographyOptions{defernumbers=true}
+
+\addbibresource{journals.bib}
+\addbibresource{conferences.bib}
+\addbibresource{workshops.bib}
+
 \begin{document}
     \name{Davide Domini}
     \tagline{PhD Student}
@@ -46,34 +52,27 @@
     \divider
 
     \cvblock{High School Diploma in Computer Science}{ITIS "N. Baldini"}{2018}{Ravenna, Italy}
-
+    \textbf{88/100}
     \divider
 
 \end{adjustwidth}
 
 \begin{adjustwidth}{}{-9cm}
-    \cvsection{Work Experience}
+    \cvsection{Teaching Experience}
+
     \cvblock{Teaching Tutor}{University of Bologna}{2021--ongoing}{Cesena, Italy}
-%    \textbf{Supervisor: Mirko Viroli} \newline \textbf{Co-Supervisor: Danilo Pianini}
-    \textbf{Courses:} Software Engineering \& Software Engineering for Intelligent Distributed Systems,
-     Machine Learning Systems for Data Science,
-     Industry 4.0,
-     Laboratory of Big Data, Data Mining and Data Analytics, 
-     Computer Science, 
-     Digital Design Principles and Computer Architecture
+    Teaching tutor for more than 10 courses on Computer Principles, Programming, Software Engineering, Machine Learning and Data Mining.
      
-%
-%
    \divider
 
-    \cvblock{Teacher}{FITSTIC ITS Academy}{2022--ongoing}{Cesena, Italy}
+    \cvblock{Professor}{FITSTIC ITS Academy}{2022--ongoing}{Cesena, Italy}
     \textbf{Course:} Relational Database Systems
 
     \divider
 
-    \cvblock{Deep Learning Internship}{University of Bologna}{2021}{Cesena, Italy}
-    \textbf{Goal:} Research for the development of a solution for the recognition of abnormal walking with Deep Convolutional Neural Networks
-    
+    \cvblock{Professor}{Formart}{2025--ongoing}{Cesena, Italy}
+    \textbf{Course:} Artificial Intelligence
+  
 \end{adjustwidth}
 
 \begin{adjustwidth}{}{-9cm}
@@ -138,12 +137,21 @@
 \end{adjustwidth}
 
 \begin{adjustwidth}{}{-9cm}
-    \cvsection{Publications}
-        \renewcommand{\bibsection}{}
-        \nocite{*}
-        \bibliographystyle{unsrtnat}
-        \bibliography{biblio}
+\cvsection{Journal Publications}
+\nocite{*}
+\printbibliography[title={},keyword=journal,resetnumbers=true]
+\end{adjustwidth}
 
+\begin{adjustwidth}{}{-9cm}
+\cvsection{Conference Publications}
+\nocite{*}
+\printbibliography[title={},keyword=conference,resetnumbers=true]
+\end{adjustwidth}
+
+\begin{adjustwidth}{}{-9cm}
+\cvsection{Workshop Publications}
+\nocite{*}
+\printbibliography[title={},keyword=workshop,resetnumbers=true]
 \end{adjustwidth}
 
 \end{document}
