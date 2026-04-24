@@ -7,3 +7,5 @@ curriculum_vitae.pdf
 *.synctex.gz
 *.bbl
 *.blg
+*.bcf
+*.run.xml
