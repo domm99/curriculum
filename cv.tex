@@ -1,0 +1,952 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2015 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+\documentclass[10pt,a4paper,roman]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% moderncv themes
+% The 'classic' style gives the hint-column body: every label sits in a right-aligned
+% column of its own instead of being bolded inline. The layout then carries the
+% structure, so bold is free to mean actual emphasis (see the emphasis policy below).
+\moderncvstyle{classic}
+\moderncvhead[nodetails]{3}                         % banking's centred name head
+
+%----------------------------------------------------------------------------------
+%            typography
+%----------------------------------------------------------------------------------
+% XCharter (a modernised Charter) for running text, Fira Sans for the name, headings
+% and the hint column. The serif/sans contrast is what marks structure, which keeps
+% bold free to mean actual emphasis (see the emphasis policy below). Both are OpenType
+% families shipped with TeX Live, so the CI build needs no extra fonts.
+\usepackage[T1]{fontenc}
+\usepackage{XCharter}
+\usepackage[scaled=0.94]{FiraSans}                  % Fira's x-height runs large; scale it to Charter
+\usepackage[charter]{newtxmath}                     % matching math for the bullets/middots
+\usepackage{microtype}                              % protrusion + the \textls used by \section
+
+\renewcommand*{\namefont}{\sffamily\fontsize{22}{26}\selectfont\bfseries}
+\renewcommand*{\titlefont}{\sffamily\fontsize{12}{16}\selectfont\mdseries}
+\renewcommand*{\sectionfont}{\sffamily\normalsize\bfseries}
+\renewcommand*{\subsectionfont}{\sffamily\normalsize\bfseries}
+\renewcommand*{\hintfont}{\sffamily\small}
+\renewcommand*{\pagenumberfont}{\sffamily\scriptsize}
+
+%----------------------------------------------------------------------------------
+%            colour
+%----------------------------------------------------------------------------------
+% One accent hue, used only on structure: the name, the section rules, the dates and
+% the links. Heading words and body text stay near-black, so the CV still reads
+% correctly in greyscale print.
+\moderncvcolor{black}                               % base palette; color1/color2 overridden below
+\definecolor{accent}{HTML}{24456B}                  % slate blue
+\colorlet{color1}{accent}
+\colorlet{color2}{black!55}
+% The style files \colorlet the semantic colours *before* the palette above exists, so
+% they captured the defaults and every one of them has to be re-issued here.
+\colorlet{firstnamecolor}{accent!65}
+\colorlet{lastnamecolor}{accent}
+\colorlet{namecolor}{accent}
+\colorlet{titlecolor}{black!55}
+\colorlet{addresscolor}{black!55}
+\colorlet{quotecolor}{black!70}
+\colorlet{sectioncolor}{black!88}
+\colorlet{subsectioncolor}{black!88}
+\colorlet{bodyrulecolor}{accent}
+\colorlet{hintstylecolor}{black!62}
+\colorlet{datecolor}{accent}                        % years in the hint column, and year bands
+\colorlet{skillmatrixfullcolor}{accent}
+\colorlet{skillmatrixemptycolor}{black!15}
+% Quartile badges keep the journal bibliography compact while making the ranking
+% immediately scannable. Q4 is defined for future entries, even though no current
+% journal entry uses it.
+\definecolor{quartileqone}{HTML}{C4475A}
+\definecolor{quartileqtwo}{HTML}{D47722}
+\definecolor{quartileqthree}{HTML}{9A7912}
+\definecolor{quartileqfour}{HTML}{378B6A}
+\newcommand*{\quartilebadgewithcolor}[2]{%
+  \tikz[baseline=-.65ex]\node[
+    circle,
+    draw=#1,
+    text=#1,
+    line width=.45pt,
+    inner sep=.85pt,
+    font=\sffamily\scriptsize\bfseries
+  ]{#2};%
+}
+\newcommand*{\quartilebadge}[1]{%
+  \ifstrequal{#1}{Q1}{\quartilebadgewithcolor{quartileqone}{Q1}}{%
+    \ifstrequal{#1}{Q2}{\quartilebadgewithcolor{quartileqtwo}{Q2}}{%
+      \ifstrequal{#1}{Q3}{\quartilebadgewithcolor{quartileqthree}{Q3}}{%
+        \ifstrequal{#1}{Q4}{\quartilebadgewithcolor{quartileqfour}{Q4}}{#1}%
+      }%
+    }%
+  }%
+}
+% Conference marks use the current ICORE/CORE notation. The official top rank is
+% A* (the macro also accepts A+ as an alias); non-ranked venues use a neutral label.
+\definecolor{conferencerankastar}{HTML}{7A1F3D}
+\definecolor{conferenceranka}{HTML}{C4475A}
+\definecolor{conferencerankb}{HTML}{D47722}
+\definecolor{conferencerankc}{HTML}{378B6A}
+\newcommand*{\conferencerankbadgewithcolor}[2]{%
+  \tikz[baseline=-.65ex]\node[
+    circle,
+    draw=#1,
+    text=#1,
+    line width=.45pt,
+    inner sep=.85pt,
+    font=\sffamily\scriptsize\bfseries
+  ]{#2};%
+}
+\newcommand*{\conferencestatus}[1]{%
+  \textcolor{black!58}{\sffamily\scriptsize\itshape #1}%
+}
+\newcommand*{\conferencerank}[1]{%
+  \ifstrequal{#1}{A*}{\conferencerankbadgewithcolor{conferencerankastar}{A*}}{%
+    \ifstrequal{#1}{A+}{\conferencerankbadgewithcolor{conferencerankastar}{A+}}{%
+      \ifstrequal{#1}{A}{\conferencerankbadgewithcolor{conferenceranka}{A}}{%
+        \ifstrequal{#1}{B}{\conferencerankbadgewithcolor{conferencerankb}{B}}{%
+          \ifstrequal{#1}{C}{\conferencerankbadgewithcolor{conferencerankc}{C}}{%
+            \conferencestatus{#1}%
+          }%
+        }%
+      }%
+    }%
+  }%
+}
+% moderncv's icon set uses a hollow circle for first-level bullets; a small solid dot
+% sits better against the serif body.
+\renewcommand*{\labelitemi}{\strut\textcolor{accent}{\tiny\faCircle}}
+% hyperref is loaded by moderncv at the end of the preamble, so \hypersetup has to wait
+% for it; this hook is registered after moderncv's own and therefore runs later.
+\AtEndPreamble{\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent,citecolor=accent}}
+%\renewcommand{\familydefault}{\sfdefault}         % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+% character encoding
+%\usepackage[utf8]{inputenc}                       % if you are not using xelatex ou lualatex, replace by the encoding you are using
+%\usepackage{CJKutf8}                              % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.75]{geometry}
+\usepackage{needspace}
+\usepackage{multicol}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvheadnamewidth}{10cm}            % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+% setting the colours according to \moderncvcolor
+\colorlet{languagecolor}{accent}
+\colorlet{nolanguagecolor}{black!15}
+\newcount\languagecount
+% One skill row: name first (plain — the dots carry the rating), then the level dots.
+% Emits its own line break so it can sit directly inside a \cvcolumn cell; it must NOT
+% be wrapped in \cvitem, which would nest a full-width tabular inside a narrow column.
+\newcommand\languageknowledge[2]
+  {%
+    \languagecount=0
+    \makebox[\linewidth][l]{%
+      #1\hfill
+      \loop\ifnum\languagecount<#2
+        \advance\languagecount1
+        \textcolor{languagecolor}{$\bullet$}%
+      \repeat
+      \loop\ifnum\languagecount<5
+        \advance\languagecount1
+        \textcolor{nolanguagecolor}{$\bullet$}%
+      \repeat}%
+    \\%
+  }
+
+% personal data
+\name{Davide}{Domini}
+\title{PhD Student}
+\address{Via dell'Università, 50 --- 47521 Cesena, Italy}{}{}
+\email{davide.domini@unibo.it}
+\homepage{https://domm99.github.io/}
+\social[orcid]{0009-0006-8337-8990}
+\social[github]{domm99}
+\social[stackoverflow]{davide-domini}
+% bibliography adjustements (only useful if you make citations in your resume, or print a list of publications using BibTeX)
+%   to show numerical labels in the bibliography (default is to show no labels)
+%\makeatletter\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}\makeatother
+\renewcommand*{\bibliographyitemlabel}{[\arabic{enumiv}]}
+%   to redefine the bibliography heading string ("Publications")
+%\renewcommand{\refname}{Articles}
+
+% bibliography with multiple publication categories
+\usepackage{multibib}
+\newcites{journals,conferences,workshops,chapters,preprints}%
+  {{Journal Articles},{Conference Papers},{Workshop Papers},{Book Chapters},{Preprints}}
+%----------------------------------------------------------------------------------
+%            layout refinements
+%----------------------------------------------------------------------------------
+% Section headings: letterspaced sans capitals at the left margin over a thin accent
+% rule, rather than moderncv-classic's heavy bar in the hint column. Lighter, and it
+% lets the heading span the page instead of competing with the entries beneath it.
+% Subsections keep title case and carry no rule, so the two levels stay distinct.
+\makeatletter
+\RenewDocumentCommand{\section}{sm}{%
+  \par\addvspace{2.6ex}%
+  \phantomsection{}%
+  \noindent{\sectionfont\textcolor{sectioncolor}{\textls[90]{\MakeUppercase{#2}}}}%
+  \par\nobreak\vskip.6ex%
+  \noindent{\color{bodyrulecolor}\rule{\textwidth}{.7pt}}%
+  \par\nobreak\addvspace{1.1ex}\@afterheading}
+
+\RenewDocumentCommand{\subsection}{sm}{%
+  \par\addvspace{1.6ex}%
+  \phantomsection{}%
+  \noindent{\subsectionfont\textcolor{subsectioncolor}{#2}}%
+  \par\nobreak\addvspace{.6ex}\@afterheading}
+
+\makeatother
+
+% Dates belong to the structure, so they take the accent; the other hint-column labels
+% (Role, Hours, Audience...) stay grey. \cvitem wraps the hint in \hintstyle, whose
+% \textcolor is the outer one -- the \textcolor here is applied last and therefore wins.
+\renewcommand*{\cventry}[7][.25em]{%
+  \cvitem[#1]{\textcolor{datecolor}{#2}}{%
+    {\bfseries#3}%
+    \ifthenelse{\equal{#4}{}}{}{, {\slshape#4}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    \strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small#7\end{minipage}}\fi}}
+
+% Long-form prose aligned with the main column. \cvitem wraps its content in a
+% tabular, which cannot break across pages -- a multi-page block put inside one
+% would be shunted whole to the next page, leaving a half-empty one behind. This
+% indents by the hint column instead, so the text flows and breaks normally.
+% Built as a list rather than by shifting \leftskip: LaTeX's \list overwrites \leftskip
+% from \@totalleftmargin, so a nested itemize would outdent back out of the column.
+\newenvironment{cvprose}%
+  {\begin{list}{}{%
+     \setlength{\leftmargin}{\dimexpr\hintscolumnwidth+\separatorcolumnwidth\relax}%
+     \setlength{\rightmargin}{0pt}%
+     \setlength{\listparindent}{0pt}%
+     \setlength{\itemindent}{0pt}%
+     \setlength{\labelwidth}{0pt}%
+     % \labelsep is deliberately left alone: nested lists inherit it, and zeroing it
+     % here would butt the bullets of an inner itemize against their text.
+     \setlength{\topsep}{.25em}%
+     \setlength{\parsep}{.5em}%
+     \setlength{\partopsep}{0pt}}%
+   \item\relax}%
+  {\end{list}}
+
+% Enumerations of venues (review activity, service) read as an undifferentiated run-on
+% when separated by middots. This lists them one per line, aligned with the main column
+% like \cvprose, but balanced over #1 columns so a long list still stays compact.
+% \multicols needs a real \columnwidth, which the surrounding list supplies via
+% \linewidth, hence the explicit assignment. It also refuses a one-column request
+% ("doesn't seem a good idea") and silently gives two instead, so [1] -- for lists whose
+% items are too long to share a line -- has to bypass the environment altogether.
+\makeatletter
+\newcount\cvlist@cols
+\newenvironment{cvlist}[1][2]%
+  {\begin{cvprose}%
+   \cvlist@cols=#1\relax
+   \setlength{\multicolsep}{0pt}%
+   \setlength{\columnsep}{1.2em}%
+   \setlength{\columnwidth}{\linewidth}%
+   \ifnum\cvlist@cols>\@ne\begin{multicols}{#1}\fi
+   \begin{itemize}%
+     \setlength{\itemsep}{.1ex}%
+     \setlength{\parskip}{0pt}%
+     \setlength{\topsep}{0pt}}%
+  {\end{itemize}%
+   \ifnum\cvlist@cols>\@ne\end{multicols}\fi
+   \end{cvprose}}
+\makeatother
+
+% Year band: groups the entries beneath it, the way the reference CV separates
+% academic years. The year is one of the few places bold is allowed.
+\newcommand{\cvyear}[1]{%
+  \par\addvspace{1.1ex}\Needspace{5\baselineskip}%
+  \cvitem[.35ex]{\textcolor{datecolor}{\textbf{#1}}\\[-.75ex]%
+    {\color{bodyrulecolor}\rule{\hintscolumnwidth}{.5pt}}}{}%
+  \par\nobreak}
+
+% Consistent section spacing and enough room to keep headings with their first entry.
+\newcommand{\cvsection}[1]{\Needspace{6\baselineskip}\section{#1}}
+\newcommand{\cvsubsection}[1]{\Needspace{4\baselineskip}\subsection{#1}}
+% Domain-level heading: a strong visual marker for the primary conceptual clusters.
+\newcommand{\cvgroup}[1]{%
+  \par\addvspace{3.5ex}\Needspace{7\baselineskip}%
+  \noindent\colorbox{gray}{%
+    \parbox{\dimexpr\textwidth-2\fboxsep\relax}{%
+      \sffamily\bfseries\Large\color{white}\strut #1\strut}}%
+  \par\nobreak\addvspace{1.2ex}}
+
+% Compact selected-publication row. The full author list and bibliographic metadata
+% remain canonical in the journal bibliography; the citation number links the two.
+\newcommand{\selectedjournalpaper}[6]{%
+  \cvitem{\quartilebadge{#3}}{%
+    \textbf{#1}~\citejournals{#2}. \emph{#6}.%
+    \space\textcolor{black!58}{\sffamily\scriptsize JIF #4 (#5)}}}
+
+\newcommand{\cvmetricsdate}{\today}
+
+% Compact administrative identity placed directly below the name. The closing
+% section retains only the declaration itself.
+\newcommand{\makecvidentity}{%
+  \vspace{-1.2em}%
+  \begin{center}
+    \begin{minipage}{.96\textwidth}
+      \centering\sffamily\small\color{black!65}
+       Department of Computer Science and Engineering
+      (DISI), Alma Mater Studiorum --- University of Bologna\\[.25ex]
+      Via dell'Università, 50 --- 47521 Cesena (FC), Italy $\cdot$
+      \href{mailto:davide.domini@unibo.it}{davide.domini@unibo.it}\\[.25ex]
+      \href{https://orcid.org/0009-0006-8337-8990}{ORCID 0009-0006-8337-8990} $\cdot$
+      \href{https://domm99.github.io/}{domm99.github.io} $\cdot$
+      \href{https://github.com/domm99}{GitHub domm99}
+    \end{minipage}
+  \end{center}
+  \vspace{1.1em}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+% moderncv initially measures the footer using page 1; widen it for two digits.
+\ifcsdef{pagenumberwidth}{\settowidth{\pagenumberwidth}{%
+  \color{color2}\pagenumberfont\strut 88/88}}{}
+
+\makecvtitle
+\makecvidentity
+
+%\cvgroup{Overview}
+\cvsection{Academic Overview}\label{sec:overview}
+\cvitem{Profile}{\textbf{PhD Student at the University of Bologna}}
+\cvitem{Position}{PhD Student on \textbf{public grant}, University of Bologna, November 2023--November 2026. See \hyperref[sec:positions]{Research Positions}.}
+\cvitem{Research record}{\textbf{22 publications}: 7 journal articles, 9 conference papers, 2 workshop papers, and 4 preprints. \textbf{H-index 7 with 113 citations} on Google Scholar; h-index 5 with 74 citations on Scopus (as of \cvmetricsdate). See \hyperref[sec:publications]{Publications}. \textbf{Program Chair} of AI4AS 2026. See \hyperref[sec:research-activity]{Conference Service}}
+\cvitem{Teaching}{\textbf{300+ tutoring hours}; \textbf{5 supervised theses}; See \hyperref[sec:teaching]{Teaching and Supervision}.}
+\cvitem{Software}{Designer or co-designer of Phyelds and ScaRLib. See \hyperref[sec:software]{Research Software}.}
+\cvitem{Mobility}{Three-month visiting PhD period at Trinity College Dublin, hosted by Prof. Ivana Dusparic. See \hyperref[sec:mobility]{International Experience}.}
+
+%\clearpage
+%\cvgroup{Overview continued: Career and Research Profile}
+
+\cvsection{Research Positions}\label{sec:positions}
+\cvyear{2023--2026}
+\cvitem{Period}{November 2023 --- November 2026}
+\cvitem{Position}{PhD Student}
+\cvitem{Institution}{Alma Mater Studiorum --- University of Bologna, Cesena}
+\cvitem{Supervisor}{Prof. Mirko Viroli, Prof. Danilo Pianini and Prof. Matteo Ferrara}
+\cvitem{Description}{Publicly funded PhD position on the topic of ``Engineering Many-Agent Cooperative Learning in Collective Adaptive Systems''.}
+
+
+\cvsection{Research Themes}\label{sec:research-themes}
+\begin{cvprose}
+My research lies at the intersection of \emph{collective adaptive systems engineering} and \emph{machine learning}, 
+ with a particular focus on engineering cooperative learning in large-scale distributed and many-agent systems. 
+% 
+Rather than treating learning as an isolated algorithmic component, 
+ I investigate how learning, coordination, and deployment can be designed together 
+ so that autonomous devices can cooperate through local interactions, 
+ learn from distributed data, and adapt to heterogeneity, mobility, failures, and resource constraints. 
+% 
+My work contributes to three main research areas:
+
+\begin{itemize}
+\item \textbf{Programming Frameworks and Experimental Infrastructures for Collective Learning:}
+In this research area, 
+ I develop programming abstractions, software frameworks, and experimental methodologies 
+ for engineering learning-enabled collective systems.
+%
+I designed ScaRLib, 
+ a framework for cooperative many-agent deep reinforcement learning in Scala~\citeconferences{domini2023scarlib}, 
+ subsequently extended into a hybrid toolchain connecting aggregate computing 
+ and multi-agent reinforcement learning~\citejournals{domini2024scarlib}.
+%
+To support reproducible and scalable experimentation, 
+ I proposed a reusable simulation pipeline that separates learning algorithms, distributed execution, 
+ and simulation environments~\citeconferences{domini2024reusable}.
+%
+More recently, I contributed to Phyelds, 
+ a Pythonic framework for aggregate computing designed to integrate field-based coordination 
+ with the broader Python machine-learning ecosystem~\citeconferences{aguzzi2026phyelds}.
+%
+These tools make it possible to express collective learning processes from a global perspective 
+ while retaining decentralized execution, and have been applied to federated learning, 
+ many-agent reinforcement learning, Internet-of-Things systems, and self-organizing robotic collectives.
+
+\item \textbf{Self-Organizing Federated Learning under Heterogeneous and Evolving Data:}
+This area constitutes a central part of my research 
+ and investigates how distributed devices can autonomously determine \emph{with whom} they should learn, 
+ without relying on raw-data sharing, fixed federations, or permanent central coordinators.
+%
+Starting from field-based coordination mechanisms for federated learning~\citeconferences{domini2024field} and~\citejournals{domini2026fbfl}, 
+ I developed proximity-based self-federated learning approaches in which learning federations emerge 
+ from local interactions among spatially related devices~\citeconferences{domini2024proximity}.
+%
+I subsequently introduced decentralized proximity-aware clustering mechanisms that allow devices 
+ to form multiple specialized learning regions according to both network structure 
+ and data similarity~\citejournals{domini2025decentralized}.
+%
+This line of work was further developed through ProFed, 
+ a benchmark specifically designed to evaluate proximity-based federated learning
+ under spatially structured heterogeneity~\citejournals{domini2026profed}.
+%
+More recent work extends these approaches by discovering collaboration opportunities from model novelty, 
+ combining clustered federated learning with continual learning to address mobility-induced temporal drift,
+  and integrating neural-network sparsification into the self-organization process.
+%
+Collectively, 
+ these contributions frame federated learning as an adaptive collective behavior in which 
+ both the learned models and the collaboration structure evolve over time.
+
+\item \textbf{Scalable Decentralized Reinforcement Learning:}
+Building on the principles of locality and collective coordination developed through macroprogramming, 
+ I investigate reinforcement-learning methodologies that remain effective as the number 
+ of interacting agents increases.
+%
+In particular, 
+ I proposed neighbor-based decentralized training strategies in which agents learn through interactions 
+ with limited local neighborhoods rather than requiring complete system knowledge~\citeconferences{malucelli2025neighbor}.
+%
+I also studied the use of graph neural networks to represent collective state and support policies 
+ that can operate across swarms of different sizes, 
+ evaluating how far learned coordination behaviors can scale beyond the configurations encountered 
+ during training~\citejournals{aguzzi2025scaling}.
+%
+Related work applies heterogeneous graph neural networks and deep reinforcement learning 
+ to collective task-offloading decisions across cloud--edge infrastructures~\citejournals{farabegoli2026heterogeneous}.
+%
+This research investigates the trade-offs among centralized, independent, and neighborhood-based learning, 
+ with the broader objective of enabling policies that rely only on local observations while remaining robust to variable population sizes, 
+ changing interaction graphs, and large-scale deployment.
+\end{itemize}
+\end{cvprose}
+\Needspace{4\baselineskip}
+\cvitem{Bibliometrics}{H-index 7 with 113 citations on Google Scholar; h-index 5 with 74 citations on Scopus (as of \cvmetricsdate).}
+
+% \cvgroup{Track Record}
+% \cvsection{Awards and Distinctions}\label{sec:awards}
+% \cventry{November 2025}{Outstanding PhD Dissertation Award}{IEEE Technical Community on Scalable Computing}{}{}{\url{https://www.ieee-tcsc.org/thesis.php}}
+% \cventry{October 2025}{Best Student Paper Award}{ACSOS 2025}{}{}{\emph{A Field-based Approach for Runtime Replanning in Swarm Robotics Missions}~\citeconferences{aguzzi2025field}.}
+% \cventry{March 2025}{Seal of Excellence}{Marie Sk\l{}odowska-Curie Actions, European Commission}{}{}{Awarded to a proposal on decentralised federated learning for large-scale systems, developed from the collaboration begun during the visiting period at Aarhus University.}
+% \cventry{September 2024}{Best Poster Award}{ACSOS 2024}{}{}{\url{https://github.com/DanySK/poster-2024-acsos-imageonomics-drones}}
+% \cventry{November 2023}{Best Master's Thesis --- Sergio Focardi Award}{}{}{}{\emph{ScaFi Web: a Scala-JavaScript platform for executing, simulating, and controlling aggregate computing systems}.}
+
+\cvsection{Scholarships and Grants}
+\cvsubsection{Research Grants}
+\cvitem{2025}{\textbf{Gemma 3 Research Award (Google) --- USD 20,000}. Credits supported research on field-based federated learning in collective adaptive systems~\citejournals{domini2025decentralized,domini2026profed} and~\citeconferences{aguzzi2026phyelds}.}
+% \cvitem{2024}{\textbf{Gemma 2 Research Award (Google) --- USD 10,000}. Credits supported research on human--LLM comparison in educational scenarios~\citejournals{braccini2026unraveling}.}
+
+\cvsubsection{Doctoral Scholarship}
+\cvitem{2023--2026}{\textbf{Computer Science and Engineering PhD Scholarship}. \emph{Issuer:} University of Bologna, under the national framework of the Italian Ministry of University and Research (MUR). This full scholarship covered all three years of my PhD at Alma Mater Studiorum --- University of Bologna and was awarded through the corresponding public competition based on qualifications and interview.}
+
+\cvsubsection{Mobility and Travel Grants}
+\cvitem{2025}{\textbf{SpaceRaise 2025}. Competitive travel support provided by Gran Sasso Science Institute for participation in the SpaceRaise Summer School in L'Aquila, Italy.}
+\cvitem{2025}{\textbf{ACM Grant --- SAC 2025}. Competitive travel support provided by ACM for participation in the 40th ACM/SIGAPP Symposium on Applied Computing in Catania, Italy, where I presented \emph{Neighbor-based decentralized training strategies for multi-agent reinforcement learning}~\citeconferences{malucelli2025neighbor}.}
+\cvitem{2024}{\textbf{IFIP Student Travel Grant --- DisCoTec 2024}. Competitive travel support provided by the International Federation for Information Processing (IFIP) for participation in DisCoTec/COORDINATION 2024 in Groningen, the Netherlands, where I presented \emph{Field-based coordination for federated learning}~\citeconferences{domini2024field}.}
+\cvitem{2023}{\textbf{Mobility Grant --- Marco Polo Programme}. \emph{Issuer:} Department of Computer Science and Engineering (DISI), University of Bologna. This selective grant, awarded through a public call, supported my three-month visiting PhD period at Trinity College Dublin, Ireland, hosted by Prof. Ivana Dusparic.}
+
+% \cvsection{Selected Journal Publications by Venue Impact}
+% \cvitem{Method}{Twelve journal articles, selected first by journal quartile and then ordered by the latest available JIF within each quartile. Metrics were checked on \cvmetricsdate.}
+% \selectedjournalpaper{RAG-Enhanced Open SLMs for Hypertension Management Chatbots}{aguzzi2025rag}{Q1}{8.8}{2025}{Journal of Medical Systems}
+% \selectedjournalpaper{Decentralized Proximity-Aware Clustering for Collective Self-Federated Learning}{domini2025decentralized}{Q1}{7.6}{2024}{Internet of Things}
+% \selectedjournalpaper{Software Engineering for Collective Cyber-Physical Ecosystems}{casadei2025software}{Q1}{6.9}{2025}{ACM Transactions on Software Engineering and Methodology}
+% \selectedjournalpaper{Scaling Swarm Coordination with GNNs---How Far Can We Go?}{aguzzi2025scaling}{Q1}{6.5}{2025}{AI}
+% \selectedjournalpaper{Heterogeneous GNN for Collective-Task Offloading in Cloud-Edge via Deep Q-Learning}{farabegoli2026heterogeneous}{Q1}{6.1}{2024}{Future Generation Computer Systems}
+% \selectedjournalpaper{A Programming Approach to Collective Autonomy}{casadei2021programming}{Q1}{4.8}{2025}{Journal of Sensor and Actuator Networks}
+% \selectedjournalpaper{Dynamic Decentralization Domains for the Internet of Things}{aguzzi2022dynamic}{Q1}{4.5}{2025}{IEEE Internet Computing}
+% \selectedjournalpaper{Java Academic Benchmark: Exam-Based Evaluation of LLMs on Object-Oriented Programming}{cocchieri2026java}{Q1}{4.1}{2024}{Journal of Systems and Software}
+% \selectedjournalpaper{A Language-Based Approach to Macroprogramming for IoT Systems through Large Language Models}{aguzzi2025language}{Q1}{3.7}{2024}{ACM Transactions on Internet of Things}
+% \selectedjournalpaper{Unraveling Creativity through Variability: A Comparison of LLMs and Humans in an Educational Q\&A Scenario}{braccini2026unraveling}{Q1}{3.5}{2024}{Technology, Knowledge and Learning}
+% \selectedjournalpaper{Privacy-Preserving LLM-Based Chatbots for Hypertensive Patient Self-Management}{montagna2025privacy}{Q2}{3.4}{2025}{Smart Health}
+% \selectedjournalpaper{A Field-Based Computing Approach to Sensing-Driven Clustering in Robot Swarms}{aguzzi2023field-sensing}{Q2}{2.5}{2025}{Swarm Intelligence}
+
+\Needspace{14\baselineskip}
+\cvsection{Peer-Reviewed Publications and Bibliometrics}\label{sec:publications}
+\cvsubsection{Bibliometrics}
+\begin{itemize}
+  \item \textbf{H-index:} 7 (Google Scholar), 5 (Scopus), as of \cvmetricsdate.
+  \item \textbf{Number of citations:} 113 (Google Scholar), 74 (Scopus), as of \cvmetricsdate.
+  \item \textbf{Number of publications:} 22 (7 journal articles, 9 conference papers, 2 workshop papers, 4 preprints).
+  \item \textbf{Number of journal publications:} 7.
+  \begin{itemize}
+    \item Number of \quartilebadge{Q1} journal publications: 5.
+    \item Number of \quartilebadge{Q2} journal publications: 2.
+    % \item Number of \quartilebadge{Q3} journal publications: ??.
+  \end{itemize}
+\end{itemize}
+All my publications (ordered by venue and year DESC) follow.
+
+Note: for Quartile (Q1-Q4), I took the highest quartile of the journal in which the paper is published in a range from the year it is accepted to the year of publication (e.g., if a paper is accepted in 2023, I took the max quartile of 2022 - 2023).
+\nocitejournals{*}
+\bibliographystylejournals{plainyr-rev}
+\bibliographyjournals{bibliography/journals}
+
+\nociteconferences{*}
+\bibliographystyleconferences{plainyr-rev}
+\bibliographyconferences{bibliography/conferences}
+
+\nociteworkshops{*}
+\bibliographystyleworkshops{plainyr-rev}
+\bibliographyworkshops{bibliography/workshops}
+
+% \nocitechapters{*}
+% \bibliographystylechapters{plainyr-rev}
+% \bibliographychapters{bibliography/book_chapters}
+
+\nocitepreprints{*}
+\bibliographystylepreprints{plainyr-rev}
+\bibliographypreprints{bibliography/preprints}
+
+\cvsection{Research Software}\label{sec:software}
+\cventry{2025 -- present}{Phyelds}{Designer}{}{}{Python framework for aggregate computing.~\citeconferences{aguzzi2026phyelds} \url{https://github.com/phyelds/phyelds}}
+\cventry{2023 -- present}{ScaRLib}{Designer}{}{}{Framework for cooperative many-agent deep reinforcement learning in Scala~\citejournals{domini2024scarlib}. \url{https://github.com/ScaRLib-group/ScaRLib}}
+
+\cvgroup{Teaching and Supervision}
+\cvsection{Teaching}\label{sec:teaching}
+\cvsubsection{Courses}
+\cvitem{Summary}{121 documented course hours through 2026, across degree courses at the University of Bologna and invited teaching at PhD schools and partner universities.}
+
+
+\cvyear{2026}
+
+\cvitem{Course}{Software Engineering}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{40}
+\cvitem{Audience}{Master's Degree Programme in Digital Transformation Management (English), University of Bologna}
+
+\cvitem{Course}{Fundamentals of Computer Science}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{20}
+\cvitem{Audience}{Bachelor's Degree Programmes in Biomedical Engineering and Electronics Engineering, University of Bologna}
+
+\cvitem{Course}{Relational Database Systems}
+\cvitem{Role}{Teacher}
+\cvitem{Hours}{30}
+\cvitem{Audience}{FITSTIC ITS Academy}
+
+\cvitem{Course}{Generative Artificial Intelligence}
+\cvitem{Role}{Teacher}
+\cvitem{Hours}{31}
+\cvitem{Audience}{Formart}
+
+
+\cvyear{2025}
+
+\cvitem{Course}{Software Engineering}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{40}
+\cvitem{Audience}{Master's Degree Programme in Digital Transformation Management (English), University of Bologna}
+
+\cvitem{Course}{Fundamentals of Computer Science}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{20}
+\cvitem{Audience}{Bachelor's Degree Programmes in Biomedical Engineering and Electronics Engineering, University of Bologna}
+
+\cvitem{Course}{Relational Database Systems}
+\cvitem{Role}{Teacher}
+\cvitem{Hours}{30}
+\cvitem{Audience}{FITSTIC ITS Academy}
+
+\cvitem{Course}{Generative Artificial Intelligence}
+\cvitem{Role}{Teacher}
+\cvitem{Hours}{15}
+\cvitem{Audience}{Formart}
+
+
+\cvyear{2024}
+
+\cvitem{Course}{Software Engineering}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{40}
+\cvitem{Audience}{Master's Degree Programme in Digital Transformation Management (English), University of Bologna}
+
+\cvitem{Course}{Relational Database Systems}
+\cvitem{Role}{Teacher}
+\cvitem{Hours}{30}
+\cvitem{Audience}{FITSTIC ITS Academy}
+
+
+\cvyear{2023}
+\cvitem{Course}{Software Engineering}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{40}
+\cvitem{Audience}{Master's Degree Programme in Digital Transformation Management (English), University of Bologna}
+
+\cvitem{Course}{Big Data, Data Mining and Data Analytics Workshop Classes}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{32}
+\cvitem{Audience}{Bachelor's Degree Programme in Computer Science and Engineering, University of Bologna}
+
+\cvitem{Course}{Machine Learning Systems for Data Science}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{20}
+\cvitem{Audience}{Bachelor's Degree Programme in Statistical Science, University of Bologna}
+
+\cvitem{Course}{Relational Database Systems}
+\cvitem{Role}{Teacher}
+\cvitem{Hours}{30}
+\cvitem{Audience}{FITSTIC ITS Academy}
+
+
+\cvyear{2022}
+
+\cvitem{Course}{Machine Learning Systems for Data Science}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{10}
+\cvitem{Audience}{Bachelor's Degree Programme in Statistical Science, University of Bologna}
+
+\cvitem{Course}{Digital Design Principles and Computer Architecture}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{50}
+\cvitem{Audience}{Bachelor's Degree Programmes in Biomedical Engineering and Electronics Engineering, University of Bologna}
+
+\cvitem{Course}{Fundamentals of Computer Science}
+\cvitem{Role}{Teaching Tutor}
+\cvitem{Hours}{10}
+\cvitem{Audience}{Bachelor's Degree Programme in Statistical Science, University of Bologna}
+
+
+\cvsubsection{Thesis (Co-) Supervision}
+\cvitem{Summary}{5 supervised theses: 4 Master's and 1 Bachelor's. Several led to peer-reviewed publications co-authored with the student, marked below.}
+\cvitem{Source}{Verifiable on the University of Bologna thesis repository: \href{https://amslaurea.unibo.it/}{AMSLaurea}}
+
+\cvyear{2026}
+\cvitem{}{\emph{Master's theses}}
+\cvitem{F. Gaeta}{Observability through a telemetry framework for distributed web apps: error and performance monitoring for Technogym Mywellness CRM}
+
+\cvyear{2024}
+\cvitem{}{\emph{Master's theses}}
+\cvitem{N. Malucelli}{Neighboring-based Strategies for Multi-Agent Reinforcement Learning~\citeconferences{malucelli2025neighbor}}
+\cvitem{F. Venturini}{Multi-Agent Reinforcement Learning of Swarm Behaviours with Graph Neural Networks: prototype and first experiments~\citejournals{aguzzi2025scaling}}
+\cvitem{F. Cavallari}{ScaRLib: integrating VMAS for GPU accelerated simulations}
+
+\cvitem{}{\emph{Bachelor's theses}}
+\cvitem{L. Bacchini}{Sviluppo di un sistema di visione artificiale per la rilevazione e localizzazione di marker ArUco in un contesto di aggregate computing~\citeconferences{aguzzi2025demonstrator}}
+
+
+\cvgroup{Research Activity}\label{sec:research-activity}
+\cvsection{Research Community Service and Dissemination}
+\cvsubsection{Conference Service}
+\cvitem{Legend}{Venue and role acronyms are expanded once under \emph{Abbreviations}, at the end of this section.}
+\cvitem{2026}{ACSOS (\textbf{Social Experience Chair}) $\cdot$ AI4AS (\textbf{Program Chair})}
+\cvitem{2025}{AAAI (PC) $\cdot$ ACSOS (PC) $\cdot$ ECOOP (AEC) $\cdot$ ICDCSW (PC) $\cdot$ WOA (PC) $\cdot$ SAC (PC) $\cdot$ iFM (AEC)}
+
+% \cvsubsection{Service in International Journals}
+% \cventry{2026 -- present}{Guest Editor}{Elsevier Computer Science Journal}{}{}{Submission: \emph{Selected Software Artifacts from the Papers of DisCoTec 2026 --- 21st International Federated Conference on Distributed Computing Techniques}.}
+% \cventry{2025 -- present}{Guest Editor}{Springer Discover Computing}{}{}{Special issue: \emph{Engineering Foundational Models for Intelligent Robotic and Multi-agent Systems}.}
+% \cventry{2025}{Managing Guest Editor}{MDPI Applied Sciences (IF 2.5)}{}{}{Special issue: \emph{Emerging Techniques in Engineering Intelligent Agents and Multi-Agent Systems}. \url{https://www.mdpi.com/journal/applsci/special_issues/36128M0RBR}}
+
+\cvsubsection{Review Activity}
+\cvitem{Journals}{9 venues.}
+\begin{cvlist}
+  \item AMC Transaction on Internet Technology
+  \item ACM Transactions on Autonomous and Adaptive Systems
+  \item Future Generation Computer Systems
+  \item Pervasive and Mobile Computing
+  \item Elsevier Internet of Things
+  \item Elsevier Computer Networks
+  \item Discover Computing, Springer Nature 
+  \item Autonomous Agents and Multi-Agent Systems, Springer Nature
+  \item Scientific Reports, Springer Nature
+\end{cvlist}
+\cvitem{Conferences and workshops}{11 venues.}
+\begin{cvlist}
+  \item COORDINATION (2024--2026)
+  \item ACSOS (2024--2026)
+  \item WCCI (2026)
+  \item AAAI (2025)
+  \item ICAART (2025)
+  \item ICDCSW (2025)
+  \item IJCNN (2025)
+  \item SAC (2025)
+  \item AAMAS (2024)
+  \item DSRT (2024)
+  \item WOA (2024)
+\end{cvlist}
+
+\cvsubsection{International Experience}\label{sec:mobility}
+\cventry{August--November 2025}{Visiting PhD Researcher}{Trinity College Dublin}{Irelan}{}{Host: Prof. Ivana Dusparic.}
+
+% \cvsubsection{Invited Talks}
+% \cvyear{2025}
+% \cvitem{Title}{Autonomous Agents with Language Chains}
+% \cvitem{Venue}{Mini School, WoA}
+% \cvitem[.7em]{Duration}{1 hour}
+% \cvitem{Title}{Introduction to LangChain}
+% \cvitem{Venue}{Deep Learning, University of Urbino}
+% \cvitem{Duration}{1 hour}
+
+\cvsubsection{Presentations at International Conferences}
+\cvitem{2025}{\textbf{SAC}: \emph{Neighbor-based decentralized training strategies for multi-agent reinforcement learning}~\citeconferences{malucelli2025neighbor}.}
+\cvitem{2025}{\textbf{IJCNN}: \emph{Sparse self-federated learning for energy efficient cooperative intelligence in {Society 5.0}}~\citeconferences{domini2025sparse}.}
+\cvitem{2024}{\textbf{DSRT}: \emph{A reusable simulation pipeline for many-agent reinforcement learning}~\citeworkshops{domini2024reusable}.}
+\cvitem{2024}{\textbf{COORDINATION}: \emph{Field-based coordination for federated learning}~\citeconferences{domini2024field}.}
+\cvitem{2024}{\textbf{ACSOS}: \emph{Proximity-based self-federated learning}~\citeconferences{domini2024proximity}.}
+\cvitem{2024}{\textbf{ACSOS Doctoral Symposium}: \emph{Towards Self-Adaptive Cooperative Learning in Collective Systems}~\citeworkshops{domini24docsymp}.}
+\cvitem{2024}{\textbf{WOA}: \emph{Towards intelligent pulverized systems: a modern approach for edge-cloud services}~\citeworkshops{domini2024towards}.}
+
+
+\cvsubsection{Talks}
+\cvitem{2026}{\textbf{Three-Minute Thesis Competition}, one of the ten PhD finalists from across the University of Bologna}
+\cvitem{2026}{\textbf{PhD Doctoral Symposium} --- University of Bologna}
+\cvitem{2025}{\textbf{SIESTA Summer School} --- Università della Svizzera Italiana}
+
+
+\cvsubsection{PhD Schools}
+\cvitem{2025}{SIESTA (Lugano, Switzerland)}
+\cvitem{2025}{SpaceRaise (L'Aquila, Italy)}
+\cvitem{2024}{Bertinoro International Spring School (Bertinoro, Italy)}
+
+% % Single point of expansion for every acronym used above (and in Publications):
+% % venues are referred to by acronym throughout and spelled out only here.
+\cvsubsection{Abbreviations}
+\cvitem{Roles}{\small PC --- Program Committee $\cdot$ AEC --- Artifact Evaluation Committee}
+\cvitem{Conferences}{\small AAAI --- AAAI Conference on Artificial Intelligence $\cdot$ ACSOS --- IEEE International Conference on Autonomic Computing and Self-Organizing Systems $\cdot$ COORDINATION --- International Conference on Coordination Models and Languages $\cdot$ DisCoTec --- International Federated Conference on Distributed Computing Techniques $\cdot$ ECOOP --- European Conference on Object-Oriented Programming $\cdot$ SAC --- ACM/SIGAPP Symposium on Applied Computing $\cdot$ ICDCSW --- International Conference on Distributed Computing Systems Workshops $\cdot$ iFM --- International Conference on Formal Methods in Software Engineering $\cdot$ WCCI --- IEEE World Congress on Computational Intelligence $\cdot$ ICAART --- International Conference on Agents and Artificial Intelligence $\cdot$ IJCNN --- International Joint Conference on Neural Networks $\cdot$ DSRT --- International Symposium on Distributed Simulation and Real Time Applications $\cdot$ AAMAS --- International Conference on Autonomous Agents and Multi-Agents Systems}
+\cvitem{Workshops}{\small AI4AS --- Artificial Intelligence for Autonomous Computing Systems (at ACSOS) $\cdot$ WoA --- Workshop ``From Objects to Agents''}
+
+
+\cvsection{Participation and Collaboration in Research Groups}
+\begin{cvlist}[1]
+  \item Participation in the research activity of the group coordinated by \textbf{Prof. Mirko Viroli} (University of Bologna, Italy), notably including \textbf{Prof. Roberto Casadei} and \textbf{Prof. Danilo Pianini}. This is the research group with which I have collaborated most extensively, on aggregate computing, macroprogramming, collective adaptive systems, cyber-physical swarms, and cooperative learning.
+  \item Collaboration with \textbf{Prof. Ivana Dusparic} (Trinity College Dublin, Ireland) on scalable and distributed reinforcement learning and novelty driven transfer learning.
+  \item Collaboration with \textbf{Prof. Lukas Esterle} (Aarhus University, Denmark) on distributed collective intelligence and decentralised federated learning. 
+  \item Collaboration with \textbf{Prof. Sara Montagna} (University of Urbino Carlo Bo, Italy) on federated learning and digital twin aggregates for smart healthcare.
+  \item Collaboration with the research group of \textbf{Prof. Antonio Liotta} (University of Bozen, Italy), notably including \textbf{Dr. Laura Ehran} (University of Bozen, Italy) and \textbf{Dr. Lucia Cavallaro} (Radboud University, The Netherlands), in the context of the COMMONWEARS project. The work addressed the role of sparsification in neural netowkrs for distributed federated learning.
+  \item Collaboration with \textbf{Dr Riccardo Venanzi} and \textbf{Dr Giovanni Delnevo} (University of Bologna, Italy), notably including Manuel Andruccioli, Angela Cortecchia and Nicolas Farabegoli on middlewares for robot swarms.
+\end{cvlist}
+
+
+\cvsection{Participation in Research Projects}  
+% \cvitem{2026--present}{\textbf{FoMaSE (FIS 3)} --- Foundations for Macro-programming-based Software Engineering. Member of the AI team, contributing to scalable AI methods for large-scale collective systems, including hybrid AI-based approaches for understanding, development, interpretability, and validation.}
+\cvitem{2023--2025}{\textbf{COMMONS-WEARS (PRIN)}. Research on community-oriented wearable computing, collective systems, and machine learning for healthcare and emergency response. Principal contributions addressed federated learning for decentralised, large-scale applications~\citeconferences{domini2024field,domini2024proximity,domini2025sparse} and~\citejournals{domini2025decentralized,domini2026fbfl}.}
+
+% \cvgroup{Academic, Professional, and Social Engagement}
+% % TODO(cv-gap): Add national evaluation panels, university boards and committees,
+% % elected institutional roles, and professional-society memberships if applicable.
+% \cvsection{Professional and Industry Experience}
+% \cventry{2026 -- present}{AI-Assisted Software Engineering Consultant}{Mixer S.p.A.}{}{}{Consulting on coding-agent adoption, software-development workflows, code generation, and developer productivity.}
+% \cventry{2025}{Invited Lectures on AI-assisted Coding}{Emilia-Romagna Region}{Bologna, Italy}{8 hours}{Training on applying AI tools to coding, debugging, and software design.}
+% \cventry{2025 -- present}{Software Engineering Consultant}{SOILMEC S.p.A.}{Cesena, Italy}{}{Strategic consulting on legacy-system modernisation and architectural improvements.}
+% \cventry{2024 -- present}{Software Engineering Consultant}{Flash Start}{Cesena, Italy}{}{Software architecture redesign and adoption of modern development practices.}
+
+% \cvsection{Institutional Activity}
+% \cventry{2020}{Student Class Representative}{Alma Mater Studiorum --- University of Bologna}{}{}{}
+
+\cvsection{Third Mission and Public Engagement}
+\cventry{2026}{Presentation at UniJunior: ``Collective Intelligence: From Nature to Robots''}{}{}{}{Outreach lesson for children aged 11--13 on collective intelligence, swarm robotics, and cooperation in robot groups, inspired by collective behaviours in nature. \url{https://www.unijunior.it/calendario/campus-di-cesena-romagna/lintelligenza-collettiva-dalla-natura-ai-robot-cesena}}
+\cventry{2025}{Presenting Project Emerge at Researchers' Night}{}{}{}{Demonstrated Project Emerge, an open-source swarm-robotics platform, to the general public. \url{https://experiment.com/projects/project-emerge-an-open-source-swarm-robotics-platform}}
+\cventry{2024}{Presenting Aggregate Computing at Researchers' Night}{}{}{}{Presented aggregate computing with physical robots, highlighting the potential of the paradigm.}
+
+\cvgroup{Background and Skills}
+\cvsection{Education}\label{sec:education}
+\cventry{2023--ongoing}{PhD in CS \& Software Engineering}{UniBO}{Cesena}{}{ Supervisor: Prof. M. Viroli.}
+\cventry{2021--2023}{Master's in CS \& Software Engineering}{UniBO}{Cesena}{110/110 cum laude}{Focus: distributed systems, aggregate computing, and MARL. \newline Thesis: \emph{Aggregate Computing and Many-Agent Reinforcement Learning: Towards a Hybrid Toolchain}.}
+\cventry{2018--2021}{Bachelor's in CS \& Software Engineering}{UniBO}{Cesena}{109/110}{Thesis: \emph{Classification of chest x-ray for Covid-19 diagnosis with Convolutional Neural Networks and Vision Transformer}.}
+\cventry{2013--2018}{High School Diploma in Computer Science}{ITIS N. Baldini}{Ravenna}{88/100}{}
+
+% % TODO(cv-gap): Add professional certifications, if any.
+% % TODO(cv-gap): Add spoken languages with CEFR or equivalent proficiency levels.
+
+\cvsection{Spoken Languages}\label{sec:languages}
+\cvitem[.7em]{Italian}{C2 native speaker}
+\cvitem[.7em]{English}{C1 advanced}
+\cvitem[.7em]{Spanish}{B1 intermediate}
+
+
+\cvsection{Technical Skills}
+\cvitem{How to read the scale}{\textbf{1}: used once or basic exposure; \textbf{2}: limited practical experience; \textbf{3}: regular working knowledge; \textbf{4}: able to give a seminar on the subject; \textbf{5}: able to write a book on the subject.}
+
+\cvsubsection{Programming Languages}
+\begin{cvcolumns}
+  \cvcolumn{}{
+    \languageknowledge{Bash}{3}
+    \languageknowledge{C}{4}
+    \languageknowledge{C++}{4}
+    \languageknowledge{C\#}{2}
+  }
+  \cvcolumn{}{
+    \languageknowledge{Haskell}{1}
+    \languageknowledge{Java}{5}
+    \languageknowledge{JavaScript}{3}
+    \languageknowledge{Kotlin}{4}
+  }
+  \cvcolumn{}{
+    \languageknowledge{Python}{5}
+    \languageknowledge{Prolog}{3}
+    \languageknowledge{Scala}{5}
+    \languageknowledge{TypeScript}{3}
+  }
+\end{cvcolumns}
+
+
+\cvsubsection{Markup and Data Languages}
+\begin{cvcolumns}
+  \cvcolumn{}{
+    \languageknowledge{CSS}{4}
+    \languageknowledge{HTML}{4}
+    \languageknowledge{JSON}{4}
+    \languageknowledge{LaTeX}{4}
+    }
+  \cvcolumn{}{
+    \languageknowledge{Markdown}{3}
+    \languageknowledge{OWL}{1}
+    \languageknowledge{RDF}{1}
+    \languageknowledge{SPARQL}{1}
+    }
+  \cvcolumn{}{
+    \languageknowledge{SQL}{4}
+    \languageknowledge{Typst}{3}
+    \languageknowledge{XML}{2}
+    \languageknowledge{YAML}{3}
+  }
+\end{cvcolumns}
+\begingroup
+\scriptsize
+\cvsubsection{Libraries and Frameworks}
+\begin{cvcolumns}
+  \cvcolumn{}{
+    \languageknowledge{Akka}{3}
+    \languageknowledge{Astro}{2}
+    \languageknowledge{Cats}{3}
+    \languageknowledge{Gymnasium}{3}
+    \languageknowledge{Jetpack Compose}{4}
+    \languageknowledge{Kotlin Multiplatform}{2}
+    \languageknowledge{Matplotlib}{4}
+    \languageknowledge{Monix}{3}
+    \languageknowledge{Mockito}{2}
+    \languageknowledge{MUnit}{2}
+    }
+  \cvcolumn{}{
+    \languageknowledge{NetworkX}{2}
+    \languageknowledge{NumPy}{4}
+    \languageknowledge{Pandas}{4}
+    \languageknowledge{PettingZoo}{4}
+    \languageknowledge{Plotly}{2}
+    \languageknowledge{pytest}{3}
+    \languageknowledge{PyTorch}{4}
+    \languageknowledge{PyTorch Geometric}{4}
+    \languageknowledge{React}{3}
+    \languageknowledge{Scala.js}{3}
+  }
+  \cvcolumn{}{
+    \languageknowledge{Scala Native}{4}
+    \languageknowledge{ScalaTest}{4}
+    \languageknowledge{scikit-learn}{4}
+    \languageknowledge{SciPy}{4}
+    \languageknowledge{Seaborn}{4}
+    \languageknowledge{TensorFlow}{4}
+    \languageknowledge{TorchRL}{4}
+    \languageknowledge{VMAS}{4}
+    \languageknowledge{Vue}{3}
+    \languageknowledge{ZIO}{1}
+  }
+\end{cvcolumns}
+\cvsubsection{LLM and RAG Tools}
+\begin{cvcolumns}
+  \cvcolumn{}{
+    \languageknowledge{ChromaDB}{3}
+    \languageknowledge{Hugging Face}{3}
+    \languageknowledge{LangChain}{3}
+  }
+  \cvcolumn{}{
+    \languageknowledge{LangChain4j}{3}
+    \languageknowledge{llama.cpp}{2}
+    \languageknowledge{Ollama}{3}
+  }
+  \cvcolumn{}{
+    \languageknowledge{Google Gen AI SDK}{2}
+    \languageknowledge{OpenAI SDK}{3}
+  }
+\end{cvcolumns}
+\cvsubsection{Development Tools and Platforms}
+\begin{cvcolumns}
+  \cvcolumn{}{
+    \languageknowledge{Claude Code}{4}
+    \languageknowledge{Codex}{4}
+    \languageknowledge{Docker}{4}
+    \languageknowledge{Docker Compose}{4}
+    \languageknowledge{Gemini CLI}{2}
+    \languageknowledge{Git}{5}
+    \languageknowledge{GitHub Actions}{4}
+    \languageknowledge{Gradle}{4}
+    \languageknowledge{Hugo}{2}
+  }
+  \cvcolumn{}{
+    \languageknowledge{IntelliJ IDEA}{4}
+    \languageknowledge{Jupyter}{3}
+    \languageknowledge{Linux}{4}
+    \languageknowledge{Maven}{3}
+    \languageknowledge{Node.js}{3}
+    \languageknowledge{npm}{3}
+    \languageknowledge{OpenCode}{2}
+    \languageknowledge{pip}{4}
+    \languageknowledge{Poetry}{4}
+  }
+  \cvcolumn{}{
+    \languageknowledge{PyCharm}{4}
+    \languageknowledge{Python venv}{4}
+    \languageknowledge{Qwen CLI}{2}
+    \languageknowledge{sbt}{4}
+    \languageknowledge{SLURM}{3}
+    \languageknowledge{SSH}{3}
+    \languageknowledge{uv}{4}
+    \languageknowledge{VS Code}{4}
+  }
+\end{cvcolumns}
+\cvsubsection{Creative and Communication Tools}
+\begin{cvcolumns}
+  \cvcolumn{}{
+    \languageknowledge{Blender}{2}
+    \languageknowledge{Canva}{3}
+  }
+  \cvcolumn{}{
+    \languageknowledge{draw.io}{3}
+    \languageknowledge{GIMP}{3}
+  }
+  \cvcolumn{}{
+    \languageknowledge{Inkscape}{4}
+  }
+\end{cvcolumns}
+\endgroup
+
+% Keep the heading with both named referees; splitting them across a page reads as if
+% the section had ended.
+\Needspace{16\baselineskip}
+\cvgroup{References and Declarations}
+\cvsection{Referees}
+% TODO(cv-gap): Add referee email addresses and confirm permission to publish them if
+% formal applications require direct contact details.
+\cvitem{M. Viroli}{Prof. Mirko Viroli, Full Professor, Department of Computer Science and Engineering (DISI), Alma Mater Studiorum --- Università di Bologna.\newline Prof. Viroli was my Master's thesis and PhD advisor.}
+\cvitem[.7em]{D. Pianini}{Prof. Danilo Pianini, Associate Professor, Department of Computer Science and Engineering (DISI), Alma Mater Studiorum --- Università di Bologna.\newline Prof. Pianini has been my PhD co-supervisor.}
+\cvitem[.7em]{R. Casadei}{Prof. Roberto Casadei, Senior Assistant Professor, Department of Computer Science and Engineering (DISI), Alma Mater Studiorum --- Università di Bologna.}
+
+\cvsubsection{Further Referees from Academia}
+\cvitem{}{Further referees for my academic profile include:}
+\begin{cvlist}[1]
+  \item Prof. Ivana Dusparic --- Trinity College Dublin, Ireland
+  \item Prof. Lukas Esterle --- Aarhus University, Denmark
+  \item Prof. Sara Montagna --- University of Urbino Carlo Bo, Italy 
+  \item Prof. Alessandro Papadopoulos --- Mälardalen University, Sweden
+  \item Prof. Giovanni Ciatto --- Alma Mater Studiorum, Università di Bologna, Italy
+  \item Prof. Andrea Omicini --- Alma Mater Studiorum, Università di Bologna, Italy
+  \item Prof. Alessandro Ricci --- Alma Mater Studiorum, Università di Bologna, Italy
+  \item Prof. Antonio Liotta --- Free University of Bozen-Bolzano, Italy
+  \item Prof. Lucia Cavallaro --- Radboud University, the Netherlands
+\end{cvlist}
+
+% \cvsection{Declaration}
+% \cvitem{Declaration}{I hereby certify that all content reported in this document is true.}
+% % TODO(cv-gap): Confirm whether the target call requires explicit GDPR consent and,
+% % if so, add the approved wording here.
+% % TODO(cv-gap): Confirm whether the distributed PDF is digitally signed; only then
+% % describe it as such in the visible declaration.
+
+% \enlargethispage{3\baselineskip}
+% \vspace{0.15cm}
+% \noindent\today\hfill Gianluca Aguzzi
+
+%\clearpage\end{CJK*}                              % if you are typesetting your resume in Chinese using CJK; the \clearpage is required for fancyhdr to work correctly with CJK, though it kills the page numbering by making \lastpage undefined
+\end{document}
+
+
+%% end of file `template.tex'.

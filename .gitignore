@@ -3,7 +3,7 @@
 *.fdb_latexmk
 *.log
 *.out
-curriculum_vitae.pdf
+cv.pdf
 *.synctex.gz
 *.bbl
 *.blg
